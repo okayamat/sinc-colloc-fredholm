@@ -29,9 +29,9 @@ Gnuplot programs for creating graphs are also stored in the directory.
 computation environment:
 
 OS: Mac OS X 10.12.6  
-CPU: 1.7 GHz Intel Core i7
-Memory: 8 GB 1600 MHz DDR3
-Compiler: Apple LLVM version 9.0.0
+CPU: 1.7 GHz Intel Core i7  
+Memory: 8 GB 1600 MHz DDR3  
+Compiler: Apple LLVM version 9.0.0  
 Libraries: Apple's Accelerate framework
 
 ## References
