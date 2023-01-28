@@ -15,7 +15,8 @@ The name of the program denotes the method and example number. For
 example, SE_orig_ex2.c denotes the original SE-Sinc-collocation method
 for example 2, and DE_new_ex3.c denotes the new DE-Sinc-collocation method
 for example 3. LAPACK in Apple's Accelerate framework is used for
-computation of the system of linear equations.
+computation of the system of linear equations. If you want to use another
+LAPACK library, modify make files according to your installation.
 
 Each program solves those problems increasing N as N = 5, 10, 15, 20, ...,
 and outputs N and maximum error over the target interval. Especially in
