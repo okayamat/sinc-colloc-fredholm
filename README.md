@@ -40,4 +40,4 @@ Library: Apple's Accelerate framework
  Improvement of a Sinc-collocation method for Fredholm integral equations
  of the second kind, BIT Numer. Math., Vol. 51 (2011), pp. 339--366.
 2. T. Okayama: Sinc-collocation methods with consistent collocation points
- for Fredholm integral equations of the second kind, arXiv, submitted.
+ for Fredholm integral equations of the second kind, arXiv:2301.12692 [math.NA]
