@@ -33,7 +33,7 @@ OS: Mac OS X 10.12.6
 CPU: 1.7 GHz Intel Core i7  
 Memory: 8 GB 1600 MHz DDR3  
 Compiler: Apple LLVM version 9.0.0  
-Library: Apple's Accelerate framework
+Library: LAPACK (Apple's Accelerate framework)
 
 ## References
 1. T. Okayama, T. Matsuo, M. Sugihara:
