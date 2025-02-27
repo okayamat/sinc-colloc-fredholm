@@ -1,10 +1,10 @@
 #include "matrixvector.h"
-#include "SE_basis_func.h"
+#include "DE_basis_func.h"
 
-/* kSE(x, a, b, tau) = k(x, SE_trans(a, b, tau)) */
-double kSE(double x, double a, double b, double tau)
+/* kDE(x, a, b, tau) = k(x, DE_trans(a, b, tau)) */
+double kDE(double x, double a, double b, double tau)
 {
-  double t = SE_trans(a, b, tau);
+  double t = DE_trans(a, b, tau);
   return x*t;
 }
 
@@ -20,17 +20,17 @@ double u(double x)
   return r/((x-0.5)*(x-0.5) + r*r);
 }
 
-double uSEn(double a, double b, double x, double h, int N, double* f_N, int n)
+double uDEn(double a, double b, double x, double h, int N, double* f_N, int n)
 {
   int j;
-  double t = SE_trans_inv(a, b, x);
+  double t = DE_trans_inv(a, b, x);
   double ans = 0;
 
   for (j = N; j > 0; j--) {
-    ans += (f_N[ j+N] - f_N[0]*waSE( j*h) - f_N[n-1]*wbSE( j*h)) * S( j, h, t);
-    ans += (f_N[-j+N] - f_N[0]*waSE(-j*h) - f_N[n-1]*wbSE(-j*h)) * S(-j, h, t);
+    ans += (f_N[ j+N] - f_N[0]*waDE( j*h) - f_N[n-1]*wbDE( j*h)) * S( j, h, t);
+    ans += (f_N[-j+N] - f_N[0]*waDE(-j*h) - f_N[n-1]*wbDE(-j*h)) * S(-j, h, t);
   }
-    ans += (f_N[ 0+N] - f_N[0]*waSE( 0  ) - f_N[n-1]*wbSE( 0  )) * S( 0, h, t);
+    ans += (f_N[ 0+N] - f_N[0]*waDE( 0  ) - f_N[n-1]*wbDE( 0  )) * S( 0, h, t);
 
     ans += f_N[0]*wa(a, b, x) + f_N[n-1]*wb(a, b, x);
 
@@ -43,7 +43,7 @@ double* substitute_xN(double a, double b, double h, int N, int n)
   double* x_N = AllocVec(n);
 
   for (i = -N; i <= N; i++) {
-    x_N[i+N] = SE_trans(a, b, i*h);
+    x_N[i+N] = DE_trans(a, b, i*h);
   }
 
   return x_N;
@@ -61,7 +61,7 @@ double* substitute_AN(double a, double b, double h, int N, int n, double* x_N)
   for (j = -N; j<= N; j++) {
     for (i = -N; i <= N; i++) {
       A_N[i+N + (j+N)*n]
-        -= h*kSE(x_N[i+N], a, b, j*h)*SE_trans_div(a, b, j*h);
+        -= h*kDE(x_N[i+N], a, b, j*h)*DE_trans_div(a, b, j*h);
     }
   }
 
@@ -84,7 +84,7 @@ int main()
 {
   double a = 0.0;
   double b = 1.0;
-  double d = 1.57;
+  double d = 3.14 / 6.0;
   double alpha = 1.0;
   double *A_N, *f_N, *x_N;
   int i, n, N, info;
@@ -92,10 +92,10 @@ int main()
   int SAMPLE = 1000;
   double hh = (b - a)/SAMPLE;
 
-  for (N = 5; N <= 150; N += 5) {
+  for (N = 5; N <= 120; N += 5) {
 
     n = 2*N+1;
-    h = sqrt(M_PI*d / (alpha * N));
+    h = log(2*d*N/alpha)/N;
 
     x_N = substitute_xN(a, b, h, N, n);
     A_N = substitute_AN(a, b, h, N, n, x_N);
@@ -110,7 +110,7 @@ int main()
       for (i = 1; i < SAMPLE; i++) {
         x = a + i*hh;
 
-        err = fabs(u(x) - uSEn(a, b, x, h, N, f_N, n));
+        err = fabs(u(x) - uDEn(a, b, x, h, N, f_N, n));
 
         maxerr = fmax(err, maxerr);
       }

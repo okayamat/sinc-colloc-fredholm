@@ -1,23 +1,34 @@
 #include "matrixvector.h"
 #include "SE_basis_func.h"
 
+double beta(double p, double q)
+{
+  return tgamma(p)*tgamma(q)/tgamma(p+q);
+}
+
 /* kSE(x, a, b, tau) = k(x, SE_trans(a, b, tau)) */
 double kSE(double x, double a, double b, double tau)
 {
-  double t = SE_trans(a, b, tau);
-  return x*t;
+  double  t  = SE_trans(a, b, tau);
+  double t18 = t*t*t*t*t*t*t*t*t*t*t*t*t*t*t*t*t*t; /* t^(18) */
+  double tma = (b - a) * SE_trans(0, 1, tau); /* t - a */
+  double bmt = (b - a) * SE_trans(1, 0, tau); /* b - t */
+  double tmp = bmt * tma; /* (b - t)(t - a) */
+  double val = (1+t18*t*t)*(2 + t + t18*t*t*t);
+  val += (5 * (2 + x*x) * t18 * (tmp));
+  val *= 2 * pow(tmp, (2 - x*x)/(2 + x*x)) / ((2+x*x)*(1+t18*t*t));
+
+  return val;
 }
 
 double g(double x)
 {
-  double r = 0.5;
-  return r/((x-0.5)*(x-0.5) + r*r) - x*atan(1/(2*r));
+  return 2*x/(1+ pow(x, 20)) - 4*beta(1.5, 4.0/(2+x*x))/(2+x*x);
 }
 
 double u(double x)
 {
-  double r = 0.5;
-  return r/((x-0.5)*(x-0.5) + r*r);
+  return 2*x/(1+ pow(x, 20));
 }
 
 double uSEn(double a, double b, double x, double h, int N, double* f_N, int n)
@@ -82,7 +93,7 @@ double* substitute_fN(int N, int n, double* x_N)
 
 int main()
 {
-  double a = 0.0;
+  double a =-1.0;
   double b = 1.0;
   double d = 1.57;
   double alpha = 1.0;

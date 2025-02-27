@@ -5,19 +5,17 @@
 double kSE(double x, double a, double b, double tau)
 {
   double t = SE_trans(a, b, tau);
-  return x*t;
+  return pow(x*t, 0.75);
 }
 
 double g(double x)
 {
-  double r = 0.5;
-  return r/((x-0.5)*(x-0.5) + r*r) - x*atan(1/(2*r));
+  return sqrt(x)*(1 - M_PI*M_PI*pow(M_PI_2*x, 0.25)/9.0);
 }
 
 double u(double x)
 {
-  double r = 0.5;
-  return r/((x-0.5)*(x-0.5) + r*r);
+  return sqrt(x);
 }
 
 double uSEn(double a, double b, double x, double h, int N, double* f_N, int n)
@@ -83,9 +81,9 @@ double* substitute_fN(int N, int n, double* x_N)
 int main()
 {
   double a = 0.0;
-  double b = 1.0;
-  double d = 1.57;
-  double alpha = 1.0;
+  double b = M_PI_2;
+  double d = 3.14;
+  double alpha = 0.5;
   double *A_N, *f_N, *x_N;
   int i, n, N, info;
   double h, err, maxerr, x;
